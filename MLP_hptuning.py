@@ -27,28 +27,15 @@ tf.random.set_seed(42)
 def model(hp):
     # Build model
     model = keras.Sequential()
-    #leaky_RELU = tf.keras.layers.LeakyReLU(alpha=0.3)
-    #model.add(layers.Dense(n_hidden1, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-    #model.add(layers.Dense(n_hidden1, input_dim=n_inputs, activation=leaky_RELU))
     hp_a = hp.Float('alpha', min_value=0.01, max_value=0.3, step=0.01)
     
     model.add(layers.LeakyReLU(alpha=hp_a))
-    #model.add(layers.Dense(n_hidden2, activation='sigmoid'))
-    #model.add(layers.Dense(n_outputs, activation=leaky_RELU))
     model.add(layers.Dense(20, activation='sigmoid'))
-    #model.add(layers.Dense(n_outputs, activation='softmax'))
-    #es = EarlyStopping(monitor='accuracy', mode='max')#, min_delta=0.0001)#, baseline=0.2)
-    #es = EarlyStopping(monitor='loss', mode='min')#, baseline=0.001)
-    #opt = keras.optimizers.Adam(learning_rate=lr)
     hp_lr = hp.Float('learning_rate', min_value=0.01, max_value=0.1, step=0.01)
     hp_m = hp.Float('momentum', min_value=0.01, max_value=0.9, step=0.05)
     hp_d = hp.Float('decay', min_value=0.01, max_value=0.1, step=0.01)
     opt = keras.optimizers.SGD(learning_rate=hp_lr, momentum=hp_m, decay=hp_d, nesterov=False)
-    #opt = keras.optimizers.Adam(learning_rate=0.1, decay=0.9)
-    #opt = keras.optimizers.SGD(learning_rate=lr, nesterov=False)
-    #model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['mse', 'accuracy'])
     model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=False), optimizer=opt, metrics=['mse', 'accuracy'])
-    #print(model.metrics_names)
     
     return model
 
@@ -59,11 +46,6 @@ train, test = preprocess_and_plot()
 #train_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\train-label-small.dat'
 train_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\train-label.dat'
 train_labels = load_labels(train_label_file)
-
-#test_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\test-label-small.dat'
-test_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\test-label.dat'
-test_labels = load_labels(test_label_file)
-
 
 tuner = kt.Hyperband(model,
                      objective='val_accuracy',

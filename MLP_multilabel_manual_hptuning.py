@@ -29,10 +29,6 @@ train, test = preprocess_and_plot()
 train_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\train-label.dat'
 train_labels = load_labels(train_label_file)
 
-#test_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\test-label-small.dat'
-test_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\test-label.dat'
-test_labels = load_labels(test_label_file)
-
 # define the dimensions
 n_inputs = len(train[0])#8520
 n_outputs = 20
@@ -133,18 +129,7 @@ for i, (_train, _test) in enumerate(kfold.split(train)):
     scores.append(score)
     
     print("Fold :", i, score)
-    """
-    # a minimun tolerance was specified, for loop termination
-    # but since I did not know the optimal hyperparameter values
-    # I decided to leave it up to max iterations of the 5-fold CV
-    if i > 0:
-        tol = float(abs(scores[i][2] - scores[i-1][2])/(scores[i][2] + scores[i-1][2]))
-        print(tol)
-    
-        if (tol < 0.05) or (tol > 0.7):
-            break
-    
-    #"""
+
 print("Scores: ", scores)
 xs = [i for i in range(0, len(scores))]
 

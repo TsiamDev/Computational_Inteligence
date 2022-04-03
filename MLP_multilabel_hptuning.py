@@ -32,7 +32,6 @@ def model(hp):
     hp_a = hp.Float('alpha', min_value=0.01, max_value=0.3, step=0.01)
     lReLU = layers.LeakyReLU(alpha=hp_a)
     hidden = layers.Dense(n_hidden1, activation=lReLU)(inputs)
-    #hidden = Dense(2048, activation='relu')(hidden)
     output = layers.Dense(n_outputs, activation='sigmoid')(hidden)
     
     outputs = []
@@ -59,10 +58,6 @@ train, test = preprocess_and_plot()
 train_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\train-label.dat'
 train_labels = load_labels(train_label_file)
 
-#test_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\test-label-small.dat'
-test_label_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\test-label.dat'
-test_labels = load_labels(test_label_file)
-
 n_inputs = len(train[0])#8520
 n_outputs = 20
 #n_hidden1 = 20
@@ -70,7 +65,6 @@ n_hidden1 = (n_outputs + n_inputs)/2
 
 
 tuner = kt.Hyperband(model,
-                     #objective='val_accuracy',
                      objective='loss',
                      max_epochs=10,
                      factor=3,

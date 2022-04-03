@@ -74,4 +74,4 @@ def load_dataset():
     test_coo, test_words = counts_to_coo(test_file)
     
     return train_coo, train_words, test_coo, test_words
-#counts_to_coo()
+#counts_to_coo('C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\train-data.dat')
