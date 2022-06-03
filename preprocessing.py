@@ -13,6 +13,8 @@ from Bag_of_words import load_dataset
 
 from scipy.sparse import coo_matrix
 
+from Apply_GA import Apply_GA
+
 def standardize(X):
     return (X - X.mean()) / X.std() 
 
@@ -47,7 +49,7 @@ def plot(coo, xs2, ys2):
     
     return lst, ys
 
-def make_train_dataset2(coo):
+def make_train_dataset(coo):
     data = []
     cols = []
     cnt = 0
@@ -86,9 +88,9 @@ def make_train_dataset2(coo):
     
     return train
             
-def preprocess_and_plot():
+def preprocess_and_plot(GA_words):
     print("Loading files...")
-    train_coo, train_words, test_coo, test_words = load_dataset()
+    train_coo, train_words, test_coo, test_words = load_dataset(GA_words)
     
     print("Preprocessing...")
     
@@ -99,9 +101,10 @@ def preprocess_and_plot():
     #train = train - train.mean()
     #test = test - test.mean()
     
-    # standardization
-    scaler = preprocessing.StandardScaler().fit(train)
-    train = scaler.transform(train)
+    # standardization - Uncomment these
+    #scaler = preprocessing.StandardScaler().fit(train)
+    #train = scaler.transform(train)
+    
     #scaler = preprocessing.StandardScaler().fit(test)
     #test = scaler.transform(test)
     
@@ -121,5 +124,14 @@ def preprocess_and_plot():
     # both are sorted in descending order
     #return lst, ys
     return train, test
+    
+def Preprocess_and_apply_GA():
+    GA_words = Apply_GA()    
+    print(GA_words)
+    
+    train, test = preprocess_and_plot(GA_words)
+    print("len(words): ", len(GA_words))
+    
+    return train
 
-#preprocess_and_plot()
+#train = Preprocess_and_apply_GA()

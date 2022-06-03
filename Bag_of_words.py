@@ -63,14 +63,57 @@ def counts_to_coo(filename):
     
     return coo, words
 
-def load_dataset():
-    train_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\train-data.dat'
-    test_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\test-data.dat'
+def resize_dictionaries_to_GA(dictionaries, words):
+    dicts = []
+    for ds in dictionaries:
+        temp = {}
+        for k, v in ds.items():
+            if k in words:
+                temp[k] = v
+        dicts.append(temp)
+                
+    return dicts
+
+def counts_to_coo2(filename, GA_words):  
+    
+    words, sent_num, word_num = read_file(filename)     
+    
+    dictionaries = count_freqs(words)
+    dictionaries = resize_dictionaries_to_GA(dictionaries, GA_words)
+    #print("----------------")
+    rows = []
+    data = []
+    cols = []
+    d_index = 0
+    for dictionary in dictionaries:
+        for key in dictionary.keys():
+            #print(key,dictionary[key])
+            cols.append(key)
+            data.append(dictionary[key])
+            rows.append(d_index)
+        d_index = d_index + 1
+    rows = np.array(rows)
+    #print(rows)
+    data = np.array(data)
+    #print(data)
+    cols = np.array(cols)
+    
+    #print(Counter(cols))
+    
+    coo = coo_matrix((data, (rows, cols)), shape=(len(dictionaries), 8520), dtype=int)
+    #print(coo)
+    
+    return coo, words
+
+def load_dataset(GA_words):
+    train_file = 'C:\\Users\\HomeTheater\\Desktop\\Computational_Inteligence-main\\Data\\train-data.dat'
+    test_file = 'C:\\Users\\HomeTheater\\Desktop\\Computational_Inteligence-main\\Data\\test-data.dat'
     
     #train_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\train-data-small.dat'
     #test_file = 'C:\\Users\\HomeTheater\\Desktop\\ΥΝ\\Εργασία2022\\Data\\test-data-small.dat'
     
-    train_coo, train_words = counts_to_coo(train_file)
+    #train_coo, train_words = counts_to_coo(train_file)
+    train_coo, train_words = counts_to_coo2(train_file, GA_words)
     test_coo, test_words = counts_to_coo(test_file)
     
     return train_coo, train_words, test_coo, test_words
